@@ -2,6 +2,7 @@
 
 package com.example.android.eggtimernotifications.util
 
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -18,6 +19,7 @@ private val REQUEST_CODE = 0
 private val FLAGS = 0
 
 
+@SuppressLint("WrongConstant")
 fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
     // Create the content intent for the notification, which launches
     // this activity
@@ -30,10 +32,23 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    // TODO: Step 2.0 add style
+    val eggImage = BitmapFactory.decodeResource(
+        applicationContext.resources,
+        R.drawable.cooked_egg
+    )
+    
 
-    // TODO: Step 2.2 add snooze action
+    val bigPicStyle = NotificationCompat.BigPictureStyle()
+        .bigPicture(eggImage)
+        .bigLargeIcon(null)
 
+    val snoozeIntent = Intent(applicationContext, SnoozeReceiver::class.java)
+    val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(
+        applicationContext,
+        REQUEST_CODE,
+        snoozeIntent,
+        FLAGS
+    )
     val builder = NotificationCompat.Builder(
         applicationContext,
         applicationContext.getString(R.string.egg_notification_channel_id)
@@ -47,7 +62,13 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         .setContentIntent(contentPendingIntent)
         .setAutoCancel(true)
 
-        // TODO: Step 2.1 add style to builder
+        .setStyle(bigPicStyle)
+        .setLargeIcon(eggImage)
+        .addAction(
+            R.drawable.egg_icon,
+            applicationContext.getString(R.string.snooze),
+            snoozePendingIntent
+        )
 
         // TODO: Step 2.3 add snooze action
 
