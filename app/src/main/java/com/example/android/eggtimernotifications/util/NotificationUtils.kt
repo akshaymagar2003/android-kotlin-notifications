@@ -5,6 +5,7 @@ package com.example.android.eggtimernotifications.util
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_ONE_SHOT
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -47,7 +48,7 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
         applicationContext,
         REQUEST_CODE,
         snoozeIntent,
-        FLAGS
+        FLAG_ONE_SHOT
     )
     val builder = NotificationCompat.Builder(
         applicationContext,
@@ -69,6 +70,7 @@ fun NotificationManager.sendNotification(messageBody: String, applicationContext
             applicationContext.getString(R.string.snooze),
             snoozePendingIntent
         )
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
 
         // TODO: Step 2.3 add snooze action
 
